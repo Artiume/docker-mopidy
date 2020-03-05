@@ -1,4 +1,4 @@
-FROM debian:stretch-slim
+FROM lsiobase/ubuntu:bionic
 
 ARG DEBIAN_FRONTEND=noninteractive
 
