@@ -1,27 +1,38 @@
 FROM debian:stretch-slim
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 RUN set -ex \
     # Official Mopidy install for Debian/Ubuntu along with some extensions
     # (see https://docs.mopidy.com/en/latest/installation/debian/ )
  && apt-get update \
- && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+ && apt-get install -y \
         curl \
+        software-properties-common \
         dumb-init \
         gcc \
         gnupg \
         gstreamer1.0-alsa \
         gstreamer1.0-plugins-bad \
-        python-crypto \
+        apt-transport-https \
+        ca-certificates \
+        python3-crypto \
+        python3-pykka \
+ && add-apt-repository ppa:deadsnakes/ppa \
  && curl -L https://apt.mopidy.com/mopidy.gpg | apt-key add - \
  && curl -L https://apt.mopidy.com/mopidy.list -o /etc/apt/sources.list.d/mopidy.list \
- && apt-get update \
+ && apt-get update -y && apt-get install -y  python3.7 python3-pip && rm /usr/bin/python3 && ln -s python3.7 /usr/bin/python3
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         mopidy \
         mopidy-soundcloud \
         mopidy-spotify \
  && curl -L https://bootstrap.pypa.io/get-pip.py | python - \
- && pip install -U six pyasn1 requests[security] cryptography \
- && pip install \
+ && pip3 install -U six pyasn1 requests[security] cryptography \
+ && pip3 install \
         Mopidy-Iris \
         Mopidy-Moped \
         Mopidy-GMusic \
