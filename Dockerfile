@@ -56,7 +56,10 @@ COPY entrypoint.sh /entrypoint.sh
 # Default configuration.
 COPY mopidy.conf /config/mopidy.conf
 
-# Copy the pulse-client configuratrion.
+# Copy the Jellyfin configuraion.
+COPY jellyfin.conf /config/jellyfin.conf
+
+# Copy the pulse-client configuration.
 COPY pulse-client.conf /etc/pulse/client.conf
 
 # Allows any user to run mopidy, but runs by default as a randomly generated UID/GID.
