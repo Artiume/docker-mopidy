@@ -33,6 +33,7 @@ RUN apt-get update && apt-get install -y \
  && curl -L https://bootstrap.pypa.io/get-pip.py | python - \
  && pip3 install -U six pyasn1 requests[security] cryptography \
  && pip3 install \
+        Mopidy-Jellyfin \
         Mopidy-Iris \
         Mopidy-Moped \
         Mopidy-GMusic \
