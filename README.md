@@ -102,7 +102,7 @@ Example to check it works:
 Most arguments are optional (see some examples below):
 
   * Docker arguments:
-      * `$PUT_HERE_EXRA_DOCKER_ARGUMENTS_FOR_AUDIO_TO_WORK` should be replaced
+      * `$PUT_HERE_EXTRA_DOCKER_ARGUMENTS_FOR_AUDIO_TO_WORK` should be replaced
         with some arguments that work to play audio from within the docker
         container as tested above.
       * `-v ...:/var/lib/mopidy/media:ro` - (optional) Path to directory with local media files.
