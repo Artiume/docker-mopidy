@@ -99,6 +99,59 @@ Example to check it works:
         -o gmusic/username=USERNAME -o gmusic/password=PASSWORD \
         -o soundcloud/auth_token=TOKEN
 
+```
+version: "3.7"
+networks:
+  traefik:
+    external: true
+ 
+services:
+  mopidy:
+    user: 1000:1000
+    image: artiume/mopidy
+    devices: 
+       - /dev/snd
+    container_name: mopidy
+    hostname: mopidy
+    networks:
+      traefik:
+    ports:
+      - "6600:6600"
+      - "6680:6680"
+    environment:
+      TZ: ${TZ}
+    volumes:
+      - /data/brick/mopidy:/var/lib/mopidy/local
+      - /data/unionfs/media/music:/var/lib/mopidy/media:ro
+      - /data/brick/mopidy/mopidy.conf:/config/mopidy.conf
+      - /data/brick/mopidy/jellyfin.conf:/config/jellyfin.conf
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: traefik
+      traefik.backend: mopidy
+      traefik.protocol: http
+      traefik.port: 6680
+      traefik.frontend.rule: Host:mopidy.${DOMAINNAME},
+      traefik.frontend.auth.forward.address: http://traefik-forward-auth:4181
+      traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
+      traefik.frontend.auth.forward.trustForwardHeader: "true"
+      traefik.frontend.passHostHeader: "true"
+      traefik.frontend.headers.SSLForceHost: "true"
+      traefik.frontend.headers.SSLHost: mopidy.${DOMAINNAME}
+      traefik.frontend.headers.SSLRedirect: "true"
+      traefik.frontend.headers.browserXSSFilter: "true"
+      traefik.frontend.headers.contentTypeNosniff: "true"
+      traefik.frontend.headers.forceSTSHeader: "true"
+      traefik.frontend.headers.STSSeconds: 315360000
+      traefik.frontend.headers.STSIncludeSubdomains: "true"
+      traefik.frontend.headers.STSPreload: "true"
+      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
+      traefik.frontend.headers.frameDeny: "true"
+      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https://${DOMAINNAME}'
+    restart: always
+```
+
+
 Most arguments are optional (see some examples below):
 
   * Docker arguments:
